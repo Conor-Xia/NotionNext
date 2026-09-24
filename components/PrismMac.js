@@ -615,20 +615,21 @@ const renderMermaid = mermaidCDN => {
   let hasMermaidBlocks = false
 
   for (const article of articles) {
-    const mermaidCodeBlocks = article.querySelectorAll(
-      '.notion-code.language-mermaid'
-    )
+    const mermaidCodeBlocks = article.querySelectorAll('.notion-code')
     for (const codeBlock of mermaidCodeBlocks) {
-      const chart = codeBlock.querySelector('code')?.textContent
-      if (!chart) continue
+      const chart = codeBlock.querySelector('code')?.textContent?.trim()
+      const isDeclaredMermaid = codeBlock.classList.contains('language-mermaid')
+      const looksLikeMermaid = /^(flowchart|graph|sequenceDiagram|classDiagram|stateDiagram|erDiagram|journey|gantt|pie|mindmap|timeline|quadrantChart|requirementDiagram|gitGraph|sankey-beta)\b/.test(chart || '')
+      if (!chart || (!isDeclaredMermaid && !looksLikeMermaid)) continue
       hasMermaidBlocks = true
-      let mermaidChart = codeBlock.querySelector('.mermaid')
-      if (!mermaidChart) {
-        mermaidChart = document.createElement('pre')
-        mermaidChart.className = 'mermaid'
-        mermaidChart.textContent = chart
-        codeBlock.appendChild(mermaidChart)
-      }
+      codeBlock.innerHTML = ''
+      codeBlock.style.background = 'transparent'
+      codeBlock.style.padding = '1rem 0'
+      codeBlock.style.whiteSpace = 'normal'
+      const mermaidChart = document.createElement('div')
+      mermaidChart.className = 'mermaid flex justify-center overflow-x-auto'
+      mermaidChart.textContent = chart
+      codeBlock.appendChild(mermaidChart)
     }
   }
 
@@ -640,7 +641,8 @@ const renderMermaid = mermaidCDN => {
         try {
           const mermaid = window.mermaid
           if (!mermaid) return
-          mermaid?.contentLoaded()
+          mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default' })
+          mermaid.run({ nodes: Array.from(document.querySelectorAll('#notion-article .mermaid')) })
         } catch (err) {
           console.warn('[PrismMac] mermaid render failed:', err)
         }
