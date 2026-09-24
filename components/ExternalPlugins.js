@@ -26,9 +26,7 @@ const ExternalPlugin = props => {
   const [pluginsIdle, setPluginsIdle] = useState(false)
   const innerLinkPages = props?.allLinkPages || props?.allNavPages
   const DISABLE_PLUGIN = siteConfig('DISABLE_PLUGIN', null, NOTION_CONFIG)
-  // Production blog: keep the theme debugging toolbar disabled even when an
-  // older Vercel environment variable or Notion override is still present.
-  const THEME_SWITCH = false
+  // Production blog: keep the theme debugging toolbar disabled even when an\n  // older Vercel environment variable or Notion override is still present.\n  const THEME_SWITCH = false
   const DEBUG = siteConfig('DEBUG', null, NOTION_CONFIG)
   const INNER_PAGE_URL_PARENT_PATH = siteConfig(
     'INNER_PAGE_URL_PARENT_PATH',
@@ -418,3 +416,178 @@ const ExternalPlugin = props => {
       {/* gitter聊天室 */}
       {COMMENT_GITTER_ROOM && (
         <>
+          <script
+            src='https://sidecar.gitter.im/dist/sidecar.v1.js'
+            async
+            defer
+          />
+          <script
+            async
+            dangerouslySetInnerHTML={{
+              __html: `
+            ((window.gitter = {}).chat = {}).options = {
+              room: '${COMMENT_GITTER_ROOM}'
+            };
+            `
+            }}
+          />
+        </>
+      )}
+
+      {/* 百度统计 */}
+      {ANALYTICS_BAIDU_ID && (
+        <script
+          async
+          dangerouslySetInnerHTML={{
+            __html: `
+          var _hmt = _hmt || [];
+          (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?${ANALYTICS_BAIDU_ID}";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+          })();
+          `
+          }}
+        />
+      )}
+
+      {/* 站长统计 */}
+      {ANALYTICS_CNZZ_ID && (
+        <script
+          async
+          dangerouslySetInnerHTML={{
+            __html: `
+          document.write(unescape("%3Cspan style='display:none' id='cnzz_stat_icon_${ANALYTICS_CNZZ_ID}'%3E%3C/span%3E%3Cscript src='https://s9.cnzz.com/z_stat.php%3Fid%3D${ANALYTICS_CNZZ_ID}' type='text/javascript'%3E%3C/script%3E"));
+          `
+          }}
+        />
+      )}
+
+      {/* UMAMI 统计 */}
+      {UMAMI_ID && (
+        <script async defer src={UMAMI_HOST} data-website-id={UMAMI_ID}></script>
+      )}
+
+      {/* 谷歌统计 */}
+      {ANALYTICS_GOOGLE_ID && (
+        <>
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_GOOGLE_ID}`}
+          />
+          <script
+            async
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${ANALYTICS_GOOGLE_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `
+            }}
+          />
+        </>
+      )}
+
+      {/* Matomo 统计 */}
+      {MATOMO_HOST_URL && MATOMO_SITE_ID && (
+        <script
+          async
+          dangerouslySetInnerHTML={{
+            __html: `
+              var _paq = window._paq = window._paq || [];
+              _paq.push(['trackPageView']);
+              _paq.push(['enableLinkTracking']);
+              (function() {
+                var u="//${MATOMO_HOST_URL}/";
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+              })();
+            `
+          }}
+        />
+      )}
+    </>
+  )
+}
+
+const TwikooCommentCounter = dynamic(
+  () => import('@/components/TwikooCommentCounter'),
+  { ssr: false }
+)
+const DebugPanel = dynamic(() => import('@/components/DebugPanel'), {
+  ssr: false
+})
+const ThemeSwitch = dynamic(() => import('@/components/ThemeSwitch'), {
+  ssr: false
+})
+const Fireworks = dynamic(() => import('@/components/Fireworks'), {
+  ssr: false
+})
+const MouseFollow = dynamic(() => import('@/components/MouseFollow'), {
+  ssr: false
+})
+const Nest = dynamic(() => import('@/components/Nest'), { ssr: false })
+const FlutteringRibbon = dynamic(
+  () => import('@/components/FlutteringRibbon'),
+  { ssr: false }
+)
+const Ribbon = dynamic(() => import('@/components/Ribbon'), { ssr: false })
+const Sakura = dynamic(() => import('@/components/Sakura'), { ssr: false })
+const StarrySky = dynamic(() => import('@/components/StarrySky'), {
+  ssr: false
+})
+const DifyChatbot = dynamic(() => import('@/components/DifyChatbot'), {
+  ssr: false
+})
+const Analytics = dynamic(
+  () =>
+    import('@vercel/analytics/react').then(m => {
+      return m.Analytics
+    }),
+  { ssr: false }
+)
+const MusicPlayer = dynamic(() => import('@/components/Player'), { ssr: false })
+const Ackee = dynamic(() => import('@/components/Ackee'), { ssr: false })
+const Gtag = dynamic(() => import('@/components/Gtag'), { ssr: false })
+const Busuanzi = dynamic(() => import('@/components/Busuanzi'), { ssr: false })
+const Messenger = dynamic(() => import('@/components/FacebookMessenger'), {
+  ssr: false
+})
+const VConsole = dynamic(() => import('@/components/VConsole'), { ssr: false })
+const CustomContextMenu = dynamic(
+  () => import('@/components/CustomContextMenu'),
+  { ssr: false }
+)
+const DisableCopy = dynamic(() => import('@/components/DisableCopy'), {
+  ssr: false
+})
+const AdBlockDetect = dynamic(() => import('@/components/AdBlockDetect'), {
+  ssr: false
+})
+const LoadingProgress = dynamic(() => import('@/components/LoadingProgress'), {
+  ssr: false
+})
+const AosAnimation = dynamic(() => import('@/components/AOSAnimation'), {
+  ssr: false
+})
+
+const Coze = dynamic(() => import('@/components/Coze'), {
+  ssr: false
+})
+const DocsChat = dynamic(() => import('@/components/DocsChat'), {
+  ssr: false
+})
+const LA51 = dynamic(() => import('@/components/LA51'), {
+  ssr: false
+})
+const TianliGPT = dynamic(() => import('@/components/TianliGPT'), {
+  ssr: false
+})
+
+export default ExternalPlugin
