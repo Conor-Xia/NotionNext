@@ -1,30 +1,17 @@
-import SmartLink from '@/components/SmartLink'
-
 /**
  * 首页导航大按钮组件
  * @param {*} props
  * @returns
  */
-const NavButtonGroup = (props) => {
-  const { categoryOptions } = props
-  if (!categoryOptions || categoryOptions.length === 0) {
-    return <></>
-  }
-
+const NavButtonGroup = () => {
   return (
-    <nav id='home-nav-button' className={'w-full z-10 md:h-72 md:mt-6 xl:mt-32 px-5 py-2 mt-8 flex flex-wrap md:max-w-6xl space-y-2 md:space-y-0 md:flex justify-center max-h-80 overflow-auto'}>
-      {categoryOptions?.map(category => {
-        return (
-          <SmartLink
-            key={`${category.name}`}
-            title={`${category.name}`}
-            href={`/category/${category.name}`}
-            passHref
-            className='text-center text-white shadow-text w-full sm:w-4/5 md:mx-6 md:w-40 md:h-14 lg:h-20 h-14 justify-center items-center flex border-2 cursor-pointer rounded-lg glassmorphism hover:bg-white hover:text-black duration-200 hover:scale-105 transform'>
-               {category.name}
-            </SmartLink>
-        )
-      })}
+    <nav id='home-nav-button' className='z-10 mt-8 flex flex-wrap items-center justify-center gap-4 px-5'>
+      <a href='#wrapper' className='inline-flex h-12 min-w-[152px] items-center justify-center rounded-xl bg-blue-600 px-6 font-semibold text-white shadow-lg shadow-blue-950/20 transition hover:-translate-y-0.5 hover:bg-blue-700'>
+        <i className='fas fa-book-open mr-2' aria-hidden />开始阅读
+      </a>
+      <a href='/category' className='inline-flex h-12 min-w-[152px] items-center justify-center rounded-xl border border-white/80 bg-white/15 px-6 font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-slate-900'>
+        <i className='fas fa-th-large mr-2' aria-hidden />专题导航
+      </a>
     </nav>
   )
 }
