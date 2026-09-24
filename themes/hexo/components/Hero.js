@@ -1,15 +1,13 @@
 import LazyImage from '@/components/LazyImage'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
-import { loadExternalResource } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import CONFIG from '../config'
 import NavButtonGroup from './NavButtonGroup'
 
 let wrapperTop = 0
 
 const Hero = props => {
-  const [typed, changeType] = useState()
   const { siteInfo } = props
   const { locale } = useGlobal()
   const scrollToWrapper = () => {
@@ -17,32 +15,11 @@ const Hero = props => {
     window.scrollTo({ top: wrapperTop - 2 * rem, behavior: 'smooth' })
   }
 
-  const GREETING_WORDS = siteConfig('GREETING_WORDS').split(',')
-  const GREETING_WORDS_TYPE_SPEED = Number(siteConfig('GREETING_WORDS_TYPE_SPEED')) || 200
-  const GREETING_WORDS_BACK_SPEED = Number(siteConfig('GREETING_WORDS_BACK_SPEED')) || 100
   useEffect(() => {
     updateHeaderHeight()
-
-    if (!typed && window && document.getElementById('typed')) {
-      loadExternalResource('/js/typed.min.js', 'js').then(() => {
-        if (window.Typed) {
-          changeType(
-            new window.Typed('#typed', {
-              strings: GREETING_WORDS,
-              typeSpeed: GREETING_WORDS_TYPE_SPEED,
-              backSpeed: GREETING_WORDS_BACK_SPEED,
-              backDelay: 400,
-              showCursor: true,
-              smartBackspace: true
-            })
-          )
-        }
-      })
-    }
-
     window.addEventListener('resize', updateHeaderHeight)
     return () => window.removeEventListener('resize', updateHeaderHeight)
-  })
+  }, [])
 
   function updateHeaderHeight() {
     requestAnimationFrame(() => {
@@ -57,14 +34,14 @@ const Hero = props => {
     <header
       id='header'
       style={{ zIndex: 1 }}
-      className='w-full h-screen relative overflow-hidden bg-gradient-to-br from-sky-500 via-cyan-400 to-emerald-300'>
-      <div className='absolute inset-0 bg-gradient-to-b from-slate-900/10 via-transparent to-slate-950/35' />
+      className='w-full h-[78vh] min-h-[560px] max-h-[820px] relative overflow-hidden bg-gradient-to-br from-sky-500 via-cyan-400 to-emerald-300'>
+      <div className='absolute inset-0 bg-gradient-to-b from-slate-900/5 via-slate-900/5 to-slate-950/35' />
       <div className='text-white absolute bottom-0 z-10 flex flex-col h-full items-center justify-center w-full'>
-        <div className='font-bold text-4xl md:text-5xl shadow-text'>
+        <div className='font-bold tracking-wide text-4xl md:text-6xl shadow-text'>
           {siteInfo?.title || siteConfig('TITLE')}
         </div>
-        <div className='mt-2 h-12 items-center text-center font-light shadow-text text-lg'>
-          <span id='typed' />
+        <div className='mt-4 px-4 text-center font-medium tracking-[0.18em] text-base md:text-xl shadow-text'>
+          光机设计 · 可靠性工程 · 技术复盘
         </div>
 
         {siteConfig('HEXO_HOME_NAV_BUTTONS', null, CONFIG) && (
@@ -73,7 +50,7 @@ const Hero = props => {
 
         <div
           onClick={scrollToWrapper}
-          className='z-10 cursor-pointer w-full text-center py-4 text-3xl absolute bottom-10 text-white [text-shadow:0_0_0.1em_black,0_0_0.2em_black]'>
+          className='z-10 cursor-pointer w-full text-center py-3 text-2xl absolute bottom-5 text-white [text-shadow:0_0_0.1em_black,0_0_0.2em_black]'>
           <div className='opacity-70 animate-bounce text-xs'>
             {siteConfig('HEXO_SHOW_START_READING', null, CONFIG) &&
               locale.COMMON.START_READING}
@@ -89,7 +66,7 @@ const Hero = props => {
         src={heroCover}
         width={1920}
         height={1080}
-        className={`header-cover w-full h-screen object-cover object-center ${siteConfig('HEXO_HOME_NAV_BACKGROUND_IMG_FIXED', null, CONFIG) ? 'fixed' : ''}`}
+        className={`header-cover w-full h-full object-cover object-center ${siteConfig('HEXO_HOME_NAV_BACKGROUND_IMG_FIXED', null, CONFIG) ? 'fixed' : ''}`}
       />
     </header>
   )
