@@ -26,7 +26,7 @@ const ExternalPlugin = props => {
   const [pluginsIdle, setPluginsIdle] = useState(false)
   const innerLinkPages = props?.allLinkPages || props?.allNavPages
   const DISABLE_PLUGIN = siteConfig('DISABLE_PLUGIN', null, NOTION_CONFIG)
-  // Production blog: keep the theme debugging toolbar disabled even when an\n  // older Vercel environment variable or Notion override is still present.\n  const THEME_SWITCH = false
+  const THEME_SWITCH = siteConfig('THEME_SWITCH', null, NOTION_CONFIG)
   const DEBUG = siteConfig('DEBUG', null, NOTION_CONFIG)
   const INNER_PAGE_URL_PARENT_PATH = siteConfig(
     'INNER_PAGE_URL_PARENT_PATH',
@@ -258,7 +258,7 @@ const ExternalPlugin = props => {
       <GlobalStyle />
       {ENABLE_ICON_FONT && <IconFont />}
       {MOUSE_FOLLOW && <MouseFollow />}
-      {pluginsIdle && THEME_SWITCH && <ThemeSwitch />}
+      {/* Theme toolbar disabled on the production blog. */}
       {DEBUG && <DebugPanel />}
       {ANALYTICS_ACKEE_TRACKER && <Ackee />}
       {ANALYTICS_GOOGLE_ID && <Gtag />}
